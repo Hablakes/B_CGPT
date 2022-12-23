@@ -1,0 +1,39 @@
+To create a report in Autotask to find tickets where the work type does not match the resource type, you can use the Autotask API and a programming language such as Python. Here is an example of how you could do this:
+
+Install the Autotask API Python library by running the following command:
+
+pip install autotask_api
+
+Import the necessary libraries and authenticate with the Autotask API:
+
+import autotask_api
+
+client = autotask_api.Client(
+    integration_id='YOUR_INTEGRATION_ID',
+    integration_key='YOUR_INTEGRATION_KEY',
+    user_name='YOUR_USER_NAME',
+    password='YOUR_PASSWORD',
+    server='https://webservices.autotask.net/atservices/1.5/atws.wsdl'
+)
+
+Query the Autotask database to retrieve the tickets that meet the criteria you specified:
+Copy code
+
+query = "SELECT WorkType.Name, Resource.Type FROM Ticket WHERE WorkType.Name <> Resource.Type"
+
+response = client.query(query)
+tickets = response['entities']
+Iterate through the list of tickets and print the work type and resource type for each one:
+Copy code
+for ticket in tickets:
+    work_type = ticket['WorkType']['Name']['value']
+    resource_type = ticket['Resource']['Type']['value']
+    print(f"Work type: {work_type}, Resource type: {resource_type}")
+
+Save the file with a .py extension, such as report.py.
+
+Run the script using the following command:
+
+python report.py
+
+This will print a list of tickets where the work type does not match the resource type.

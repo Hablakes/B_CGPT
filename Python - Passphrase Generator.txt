@@ -1,0 +1,11 @@
+import random
+
+# List of words to use in passphrases
+words = ["apple", "banana", "cherry", "date", "elderberry", "fig", "grape", "huckleberry"]
+
+# Generate a random passphrase with 4 words
+passphrase = " ".join([words[random.randint(0, len(words)-1)] for _ in range(4)])
+print(passphrase)
+
+
+

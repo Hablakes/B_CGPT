@@ -1,0 +1,15 @@
+You will need to modify the script to specify the path to the image file and the drive letter of the USB drive. You will also need to create a diskpart.txt file with the following commands:
+
+
+Copy code
+select disk 1
+clean
+create partition primary
+select partition 1
+active
+format fs=ntfs quick
+assign
+exit
+
+
+This file should be placed in the same directory as the script and the path should be modified in the script to point to the correct location.

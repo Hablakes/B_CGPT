@@ -1,0 +1,69 @@
+Open a text editor, such as Notepad, and create a new file.
+
+At the top of the file, add the following lines to define the constants and variables that you will use:
+
+---------------------------------------------------------------------------------------------------------------
+
+Const WshShell = CreateObject("WScript.Shell")
+Dim objShell, objFSO, objFile, strComputer, strText
+
+---------------------------------------------------------------------------------------------------------------
+
+
+Add a function to create the GUI text entry box:
+
+---------------------------------------------------------------------------------------------------------------
+
+Function GetInput(prompt)
+  GetInput = WshShell.Popup(prompt, 0, "Enter Item", 0)
+End Function
+
+---------------------------------------------------------------------------------------------------------------
+
+Add a function to retrieve the audit logs for the given item:
+
+---------------------------------------------------------------------------------------------------------------
+
+Function GetAuditLogs(strItem)
+  strComputer = "."
+  Set objShell = CreateObject("WScript.Shell")
+  Set objFSO = CreateObject("Scripting.FileSystemObject")
+  Set objFile = objFSO.CreateTextFile("C:\temp\auditlogs.txt", True)
+
+  ' Retrieve the audit logs for the given item
+  Set objExecObject = objShell.Exec("auditpol /get /category:" & strItem & " /r /f:text")
+
+  ' Read the output of the command and write it to the file
+  While Not objExecObject.StdOut.AtEndOfStream
+    strText = objExecObject.StdOut.ReadLine()
+    objFile.WriteLine strText
+  Wend
+
+  objFile.Close
+  Set objFile = Nothing
+  Set objFSO = Nothing
+  Set objShell = Nothing
+End Function
+
+---------------------------------------------------------------------------------------------------------------
+
+In the main body of the script, prompt the user to enter the item for which they want to retrieve the audit logs:
+
+---------------------------------------------------------------------------------------------------------------
+
+strItem = GetInput("Enter the item for which you want to retrieve the audit logs:")
+
+---------------------------------------------------------------------------------------------------------------
+
+Call the GetAuditLogs function, passing the item as an argument:
+
+---------------------------------------------------------------------------------------------------------------
+
+GetAuditLogs strItem
+
+---------------------------------------------------------------------------------------------------------------
+
+
+Save the file with a .vbs extension, such as auditlogs.vbs.
+Double-click the auditlogs.vbs file to run it. This will display a GUI text entry box, where you can enter the item for which you want to retrieve the audit logs. The audit logs will be saved to a file called auditlogs.txt in the C:\temp folder.
+Note: This script assumes that the auditpol command is available on your system. If it is not, you will need to use a different method to retrieve the audit logs.

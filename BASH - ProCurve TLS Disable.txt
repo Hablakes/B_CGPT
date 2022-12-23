@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Check if ssh is installed
+if ! [ -x "$(command -v ssh)" ]; then
+  echo 'Error: ssh is not installed.' >&2
+  exit 1
+fi
+
+# Set the user, password, and IP address of the switch
+USERNAME=admin
+PASSWORD=password
+SWITCH_IP=10.0.0.1
+
+# Connect to the switch using ssh and turn off all but the current TLS options
+ssh "$USERNAME"@"$SWITCH_IP" << EOF
+enable
+configure terminal
+no crypto pki trustpoint default
+no crypto pki trustpoint TP-self-signed-3309455880
+crypto pki trustpoint current
+exit
+exit
+EOF
+
+# Check the connection status
+if [ $? -eq 0 ]; then
+  echo 'Successfully connected to the switch and turned off all but the current TLS options.'
+else
+  echo 'Error: Failed to connect to the switch or turn off all but the current TLS options.' >&2
+  exit 1
+fi

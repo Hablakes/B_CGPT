@@ -1,0 +1,54 @@
+# Set the path to the image file and the drive letter of the USB drive
+$imagePath = 'C:\path\to\image.wim'
+$driveLetter = 'D'
+
+# Check if the image file exists
+if (!(Test-Path $imagePath)) {
+  Write-Output "Error: Image file not found at $imagePath"
+  exit 1
+}
+
+# Check if the USB drive is connected
+$drive = Get-WmiObject -Class Win32_LogicalDisk | Where-Object { $_.DeviceID -eq "$driveLetter`:" }
+if (!$drive) {
+  Write-Output "Error: USB drive not found at $driveLetter`:"
+  exit 1
+}
+
+# Check if the USB drive is formatted
+if ($drive.FileSystem -ne 'NTFS') {
+  Write-Output "Error: USB drive is not formatted as NTFS"
+  exit 1
+}
+
+# Check if the USB drive has enough free space
+if ($drive.FreeSpace -lt (Get-Item $imagePath).Length) {
+  Write-Output "Error: Not enough free space on USB drive"
+  exit 1
+}
+
+# Check if the DiskPart utility is available
+if (!(Get-Command -Name diskpart)) {
+  Write-Output 'Error: DiskPart utility is not available'
+  exit 1
+}
+
+# Clean the USB drive and create a bootable partition
+diskpart /s C:\path\to\diskpart.txt
+
+# Check if the USB drive is now bootable
+$boot = Get-WmiObject -Class Win32_LogicalDisk | Where-Object { $_.DeviceID -eq "$driveLetter`:" } | Select-Object -ExpandProperty VolumeBootRecord
+if (!$boot) {
+  Write-Output "Error: Failed to make USB drive bootable"
+  exit 1
+}
+
+# Copy the image file to the USB drive
+Copy-Item -Path $imagePath -Destination "$driveLetter`:\"
+
+# Set the USB drive as the default boot device in the BIOS
+bcdedit /set {bootmgr} device boot
+bcdedit /set {bootmgr} path \EFI\Microsoft\Boot\bootmgfw.efi
+
+# Restart the computer and boot from the USB drive
+Restart-Computer -Force

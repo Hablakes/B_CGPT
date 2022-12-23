@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background-color: black;
+    }
+
+    #rotatingText {
+      display: inline-block;
+      font-size: 48px;
+      color: red;
+      transform: rotate(0deg);
+      animation: rotation 10s infinite linear;
+    }
+
+    @keyframes rotation {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 id="rotatingText">MIKE</h1>
+</body>
+</html>

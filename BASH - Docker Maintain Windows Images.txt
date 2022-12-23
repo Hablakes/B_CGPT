@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Set the name of the customer
+CUSTOMER_NAME=$1
+
+# Set the name of the Docker image
+IMAGE_NAME=windows-server-$CUSTOMER_NAME
+
+# Pull the latest Windows Server image from the Docker Hub
+docker pull microsoft/windowsservercore
+
+# Create a new Docker container based on the Windows Server image
+docker create --name $IMAGE_NAME microsoft/windowsservercore
+
+# Start the Docker container
+docker start $IMAGE_NAME
+
+# Run Windows Update in the Docker container to get the latest updates
+docker exec $IMAGE_NAME powershell -Command "Install-Module -Name PSWindowsUpdate; Import-Module PSWindowsUpdate; Get-WUInstall -AcceptAll -IgnoreReboot"
+
+# Commit the updated image to a new Docker image
+docker commit $IMAGE_NAME $IMAGE_NAME
+
+# Stop and remove the Docker container
+docker stop $IMAGE_NAME
+docker rm $IMAGE_NAME
+
+
+
+
+
+
+./update-windows-image.sh customer1

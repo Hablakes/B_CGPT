@@ -1,0 +1,83 @@
+import os
+from Crypto.Cipher import AES
+
+# Set the key and initialization vector (IV)
+key = b'Sixteen byte key'
+iv = b'Sixteen byte IV'
+
+# Set the block size for AES
+BLOCK_SIZE = 16
+
+# Pad the data to a multiple of the block size
+def pad(data):
+    padding = BLOCK_SIZE - len(data) % BLOCK_SIZE
+    return data + (padding * chr(padding)).encode('utf-8')
+
+# Unpad the data
+def unpad(data):
+    return data[:-data[-1]]
+
+# Encrypt the data
+def encrypt(plaintext):
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    return cipher.encrypt(pad(plaintext))
+
+# Decrypt the data
+def decrypt(ciphertext):
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    return unpad(cipher.decrypt(ciphertext))
+
+# Read in the plaintext file
+with open('plaintext.txt', 'rb') as f:
+    plaintext = f.read()
+
+# Encrypt the data
+ciphertext = encrypt(plaintext)
+
+# Write the encrypted data to a file
+with open('ciphertext.bin', 'wb') as f:
+    f.write(ciphertext)
+
+# Read in the encrypted data
+with open('ciphertext.bin', 'rb') as f:
+    ciphertext = f.read()
+
+# Decrypt the data
+plaintext = decrypt(ciphertext)
+
+# Write the decrypted data to a file
+with open('decrypted.txt', 'wb') as f:
+    f.write(plaintext)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+This code uses the AES.new() function to create a new AES object, which is used to encrypt and decrypt the data. 
+
+The key and iv variables should be set to your desired key and initialization vector, respectively. 
+
+The key should be a byte string of length 16, 24, or 32, and the IV should be a byte string of length 16.
+
+The pad() and unpad() functions are used to ensure that the data is a multiple of the block size (16 bytes) before encrypting and after decrypting.
+
+The encrypt() function takes plaintext as input and returns the encrypted ciphertext. 
+
+The decrypt() function takes ciphertext as input and returns the decrypted plaintext.
+
+To use this code, you will need to install the pycryptodome library. You can do this by running the following command:
+
+
+pip install pycryptodome

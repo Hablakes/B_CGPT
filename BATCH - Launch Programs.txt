@@ -1,0 +1,12 @@
+start "" "C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE"
+start "" "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+start "" "C:\Program Files\Mozilla Firefox\firefox.exe"
+
+
+start cmd /c "C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE"
+start cmd /c "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+start cmd /c "C:\Program Files\Mozilla Firefox\firefox.exe"
+
+
+
+Save the file with a .bat extension, such as launch.bat

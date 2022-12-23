@@ -1,0 +1,8 @@
+import os
+import sqlite3
+import hashlib
+import threading
+
+def scan_directory(conn, dir_path):
+    # Use os.scandir to iterate over the files and directories in the tree
+    with os.scandir(dir_path) as

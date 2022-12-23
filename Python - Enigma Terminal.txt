@@ -1,0 +1,87 @@
+# Enigma machine implementation in Python
+
+# Set up the rotors and reflector
+rotor1 = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"
+rotor2 = "AJDKSIRUXBLHWTMCQGZNPYFVOE"
+rotor3 = "BDFHJLCPRTXVZNYEIWGAKMUSQO"
+reflector = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+# Set the initial positions of the rotors
+rotor1_position = "A"
+rotor2_position = "A"
+rotor3_position = "A"
+
+# Set the plugboard settings
+plugboard = {}
+
+# Encode a message
+def encode(message):
+  encoded_message = ""
+  for letter in message:
+    # Rotate the rotors
+    rotor1_position = rotate(rotor1_position)
+    if rotor1_position == "A":
+      rotor2_position = rotate(rotor2_position)
+      if rotor2_position == "A":
+        rotor3_position = rotate(rotor3_position)
+    # Check if the letter is plugged
+    if letter in plugboard:
+      letter = plugboard[letter]
+    # Encode the letter using the rotors
+    encoded_letter = letter
+    encoded_letter = rotor1[(rotor1.index(encoded_letter) + alphabet.index(rotor1_position)) % 26]
+    encoded_letter = rotor2[(rotor2.index(encoded_letter) + alphabet.index(rotor2_position)) % 26]
+    encoded_letter = rotor3[(rotor3.index(encoded_letter) + alphabet.index(rotor3_position)) % 26]
+    # Reflect the encoded letter
+    encoded_letter = reflector[alphabet.index(encoded_letter)]
+    # Decode the encoded letter using the rotors in reverse order
+    encoded_letter = alphabet[rotor3.index(encoded_letter) - alphabet.index(rotor3_position)]
+    encoded_letter = alphabet[rotor2.index(encoded_letter) - alphabet.index(rotor2_position)]
+    encoded_letter = alphabet[rotor1.index(encoded_letter) - alphabet.index(rotor1_position)]
+    # Check if the encoded letter is plugged
+    for key, value in plugboard.items():
+      if value == encoded_letter:
+        encoded_letter = key
+        break
+    # Add the encoded letter to the encoded message
+    encoded_message += encoded_letter
+  return encoded_message
+
+# Rotate a rotor
+def rotate(rotor_position):
+  if rotor_position == "Z":
+    return "A"
+  else:
+    return chr(ord(rotor_position) + 1)
+
+# Set the plugboard settings
+def set_plugboard(new_plugboard):
+  global plugboard
+  plugboard = new_plugboard
+
+
+# Set the positions of the rotors
+def set_rotor_positions(r1, r2, r3):
+  global rotor1_position
+  global rotor2_position
+  global rotor3_position
+  rotor1_position = r1
+  rotor2_position = r2
+  rotor3_position = r3
+
+# Set the initial positions of the rotors
+set_rotor_positions("A", "A", "A")
+
+# Set the plugboard settings
+set_plugboard({})
+
+# Encode a message
+message = "HELLO WORLD"
+encoded_message = encode(message)
+print(encoded_message)
+
+# Decode the message
+decoded_message = encode(encoded_message)
+print(decoded_message)
+

@@ -1,0 +1,9 @@
+import random
+import linecache
+
+# File containing list of words
+word_list_file = "wordlist.txt"
+
+# Generate a random passphrase with 4 words
+passphrase = " ".join([linecache.getline(word_list_file, random.randint(1, 1000)).strip() for _ in range(4)])
+print(passphrase)

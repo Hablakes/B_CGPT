@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Check if OpenVPN is installed
+if ! [ -x "$(command -v openvpn)" ]; then
+  echo 'Error: OpenVPN is not installed.' >&2
+  exit 1
+fi
+
+# Check if the config file exists
+if [ ! -f "/path/to/config.ovpn" ]; then
+  echo 'Error: OpenVPN config file not found.' >&2
+  exit 1
+fi
+
+# Connect to the VPN server
+sudo openvpn --config /path/to/config.ovpn
+
+# Check the connection status
+if [ $? -eq 0 ]; then
+  echo 'Successfully connected to the VPN server.'
+else
+  echo 'Error: Failed to connect to the VPN server.' >&2
+  exit 1
+fi

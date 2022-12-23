@@ -1,0 +1,30 @@
+# Check if Posh-SSH is installed
+if (!(Get-Module -Name Posh-SSH)) {
+  Write-Output 'Error: Posh-SSH is not installed.'
+  exit 1
+}
+
+# Set the user, password, and IP address of the switch
+$username = 'admin'
+$password = 'password'
+$switchIP = '10.0.0.1'
+
+# Connect to the switch using Posh-SSH and turn off all but the current TLS options
+$session = New-SSHSession -ComputerName $switchIP -Username $username -Password $password
+Invoke-SSHCommand -SessionId $session.SessionId -Command 'enable'
+Invoke-SSHCommand -SessionId $session.SessionId -Command 'configure terminal'
+Invoke-SSHCommand -SessionId $session.SessionId -Command 'no crypto pki trustpoint default'
+Invoke-SSHCommand -SessionId $session.SessionId -Command 'no crypto pki trustpoint TP-self-signed-3309455880'
+Invoke-SSHCommand -SessionId $session.SessionId -Command 'crypto pki trustpoint current'
+Invoke-SSHCommand -SessionId $session.SessionId -Command 'exit'
+Invoke-SSHCommand -SessionId $session.SessionId -Command 'exit'
+Remove-SSHSession -SessionId $session.SessionId
+
+# Check the connection status
+if ($session) {
+  Write-Output 'Successfully connected to the switch and turned off all but the current TLS options.'
+}
+else {
+  Write-Output 'Error: Failed to connect to the switch or turn off all but the current TLS options.'
+  exit 1
+}

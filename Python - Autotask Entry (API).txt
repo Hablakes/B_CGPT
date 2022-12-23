@@ -1,0 +1,58 @@
+import requests
+
+# Set up your Autotask API credentials
+api_username = 'your_api_username'
+api_password = 'your_api_password'
+
+# Set up the API endpoint URL
+api_endpoint = 'https://webservices.autotask.net/atservices/1.5/atws.asmx'
+
+# Set up the headers for the API request
+headers = {'Content-Type': 'text/xml'}
+
+# Set up the XML payload for the API request
+payload = """
+<ATAPI xmlns="http://autotask.net/ATWS/v1.5/">
+  <Entity>Ticket</Entity>
+  <Field>AccountID</Field>
+  <Field>Title</Field>
+  <Field>Status</Field>
+  <Field>Priority</Field>
+  <Field>Type</Field>
+  <Field>Description</Field>
+  <Field>CreateDate</Field>
+  <Field>DueDateTime</Field>
+  <Field>FirstResponseDueByDateTime</Field>
+  <Field>ResolutionDueByDateTime</Field>
+  <Field>AssignedResourceID</Field>
+  <Field>AssignedResourceRoleID</Field>
+  <Field>Category</Field>
+  <Field>SubCategory</Field>
+  <Field>ProjectID</Field>
+  <Field>SiteID</Field>
+  <Field>TicketQueueID</Field>
+  <Field>TicketType</Field>
+  <Field>ParentTicketID</Field>
+  <Field>TemplateID</Field>
+  <Field>AccountLocationID</Field>
+  <Field>ServiceLevelAgreementID</Field>
+  <Field>EntitlementID</Field>
+  <Field>Billable</Field>
+  <Field>BillingType</Field>
+  <Field>ChargeType</Field>
+  <Data>
+    <AccountID>12345</AccountID>
+    <Title>New Ticket</Title>
+    <Status>Active</Status>
+    <Priority>1 - High</Priority>
+    <Type>Question</Type>
+    <Description>This is a new ticket.</Description>
+    <CreateDate>2022-12-19T12:00:00Z</CreateDate>
+    <DueDateTime>2022-12-20T12:00:00Z</DueDateTime>
+    <FirstResponseDueByDateTime>2022-12-19T13:00:00Z</FirstResponseDueByDateTime>
+    <ResolutionDueByDateTime>2022-12-21T12:00:00Z</ResolutionDueByDateTime>
+    <AssignedResourceID>123</AssignedResourceID>
+    <AssignedResourceRoleID>456</AssignedResourceRoleID>
+    <Category>Hardware</Category>
+    <SubCategory>Printers</SubCategory>
+    <ProjectID>789</ProjectID>

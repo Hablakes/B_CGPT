@@ -1,0 +1,146 @@
+import tkinter as tk
+
+class EnigmaMachine:
+    def __init__(self):
+        # Initialize the rotors and reflector
+        self.rotor1 = Rotor('EKMFLGDQVZNTOWYHXUSPAIBRCJ', 'Q')
+        self.rotor2 = Rotor('AJDKSIRUXBLHWTMCQGZNPYFVOE', 'E')
+        self.rotor3 = Rotor('BDFHJLCPRTXVZNYEIWGAKMUSQO', 'V')
+        self.reflector = Reflector('YRUHQSLDPXNGOKMIEBFZCWVJAT')
+    
+    def encrypt(self, plaintext):
+        # Iterate through each character in the plaintext
+        ciphertext = ''
+        for char in plaintext:
+            # Encode the character using the rotors and reflector
+            char = self.rotor1.encode(char)
+            char = self.rotor2.encode(char)
+            char = self.rotor3.encode(char)
+            char = self.reflector.encode(char)
+            char = self.rotor3.encode(char, reverse=True)
+            char = self.rotor2.encode(char, reverse=True)
+            char = self.rotor1.encode(char, reverse=True)
+            # Add the encoded character to the ciphertext
+            ciphertext += char
+        return ciphertext
+
+class Rotor:
+    def __init__(self, mapping, offset):
+        self.mapping = mapping
+        self.offset = ord(offset) - ord('A')
+    
+    def encode(self, char, reverse=False):
+        if reverse:
+            # Look up the character in the mapping and get its index
+            char_index = self.mapping.index(char)
+            # Subtract the offset to get the original index
+            char_index -= self.offset
+            # Wrap around if necessary
+            char_index %= 26
+            # Look up the character at the original index in the mapping
+            char = self.mapping[char_index]
+        else:
+            # Add the offset to the character's index
+            char_index = ord(char) - ord('A') + self.offset
+            # Wrap around if necessary
+            char_index %= 26
+            # Look up the character at the modified index in the mapping
+            char = self.mapping[char_index]
+        return char
+
+class Reflector:
+    def __init__(self, mapping):
+        self.mapping = mapping
+    
+    def encode(self, char):
+        # Look up the character in the mapping and get its index
+        char_index = self.mapping.index(char)
+        # Look up the character at the opposite index in the mapping
+        char = self.mapping[25 - char_index]
+        return char
+
+class EnigmaGUI(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Enigma Machine")
+        
+        # Create the Enigma machine
+        self.machine
+
+
+
+
+
+
+
+V2:
+
+
+import tkinter as tk
+
+class EnigmaMachine:
+    def __init__(self):
+        # Initialize the rotors and reflector
+        self.rotor1 = Rotor('EKMFLGDQVZNTOWYHXUSPAIBRCJ', 'Q')
+        self.rotor2 = Rotor('AJDKSIRUXBLHWTMCQGZNPYFVOE', 'E')
+        self.rotor3 = Rotor('BDFHJLCPRTXVZNYEIWGAKMUSQO', 'V')
+        self.reflector = Reflector('YRUHQSLDPXNGOKMIEBFZCWVJAT')
+    
+    def encrypt(self, plaintext):
+        # Iterate through each character in the plaintext
+        ciphertext = ''
+        for char in plaintext:
+            # Encode the character using the rotors and reflector
+            char = self.rotor1.encode(char)
+            char = self.rotor2.encode(char)
+            char = self.rotor3.encode(char)
+            char = self.reflector.encode(char)
+            char = self.rotor3.encode(char, reverse=True)
+            char = self.rotor2.encode(char, reverse=True)
+            char = self.rotor1.encode(char, reverse=True)
+            # Add the encoded character to the ciphertext
+            ciphertext += char
+        return ciphertext
+
+class Rotor:
+    def __init__(self, mapping, offset):
+        self.mapping = mapping
+        self.offset = ord(offset) - ord('A')
+    
+    def encode(self, char, reverse=False):
+        if reverse:
+            # Look up the character in the mapping and get its index
+            char_index = self.mapping.index(char)
+            # Subtract the offset to get the original index
+            char_index -= self.offset
+            # Wrap around if necessary
+            char_index %= 26
+            # Look up the character at the original index in the mapping
+            char = self.mapping[char_index]
+        else:
+            # Add the offset to the character's index
+            char_index = ord(char) - ord('A') + self.offset
+            # Wrap around if necessary
+            char_index %= 26
+            # Look up the character at the modified index in the mapping
+            char = self.mapping[char_index]
+        return char
+
+class Reflector:
+    def __init__(self, mapping):
+        self.mapping = mapping
+    
+    def encode(self, char):
+        # Look up the character in the mapping and get its index
+        char_index = self.mapping.index(char)
+        # Look up the character at the opposite index in the mapping
+        char = self.mapping[25 - char_index]
+        return char
+
+class EnigmaGUI(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Enigma Machine")
+        
+        # Create the
+

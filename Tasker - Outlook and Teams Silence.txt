@@ -1,0 +1,11 @@
+Create a new Task in Tasker and name it "Silence Outlook and Teams".
+Add an Action to the Task and select "Audio" from the list of options.
+In the Audio Action, set the "Ringer Mode" to "Silent".
+Add another Action to the Task and select "Application" from the list of options.
+In the Application Action, set the "Application" field to "Outlook" and set the "Action" field to "Stop".
+Add another Action to the Task and select "Application" from the list of options.
+In the Application Action, set the "Application" field to "Teams" and set the "Action" field to "Stop".
+
+To reverse this and unsilence Outlook and Teams, you can create a new Task and name it "Unsilence Outlook and Teams". 
+
+This Task should contain the same Actions as the "Silence Outlook and Teams" Task, but with the "Ringer Mode" set to "Normal" and the "Action" field set to "Start" for both the Outlook and Teams Actions.
