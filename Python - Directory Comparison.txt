@@ -1,0 +1,26 @@
+import os
+import hashlib
+
+def compare_directories(dir_path_1, dir_path_2):
+    # Use os.walk to iterate over the files and directories in the trees
+    for root_1, _, files_1 in os.walk(dir_path_1):
+        for file_1 in files_1:
+            file_path_1 = os.path.join(root_1, file_1)
+            # Calculate the hash of the file
+            with open(file_path_1, 'rb') as f:
+                file_hash_1 = hashlib.sha256(f.read()).hexdigest()
+            # Search for the file in the second directory tree
+            for root_2, _, files_2 in os.walk(dir_path_2):
+                if file_1 in files_2:
+                    file_path_2 = os.path.join(root_2, file_1)
+                    # Calculate the hash of the file
+                    with open(file_path_2, 'rb') as f:
+                        file_hash_2 = hashlib.sha256(f.read()).hexdigest()
+                    # Compare the hashes of the files
+                    if file_hash_1 != file_hash_2:
+                        print(f"File contents differ: {file_path_1} ({file_hash_1}), {file_path_2} ({file_hash_2})")
+                else:
+                    print(f"File not found: {file_path_1}")
+
+# Compare the two directories
+compare_directories("path/to/dir1", "path/to/dir2")
