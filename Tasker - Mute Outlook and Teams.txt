@@ -1,0 +1,13 @@
+First, create a new Task in Tasker and name it "Mute Outlook and Teams".
+
+Add an "If" action to the task and set the condition to "Time". Set the "From" and "To" fields to the start and end times when you want the apps to be muted.
+
+Add an "Action" to the task and choose the "Media" category. Set the "Action" field to "Mute" and the "Application" field to "Outlook".
+
+Add another "Action" to the task and choose the "Media" category. Set the "Action" field to "Mute" and the "Application" field to "Teams".
+
+Save the task and exit Tasker.
+
+To test the task, you can manually run it in Tasker by selecting it from the list of tasks and tapping the "Play" button. If everything is set up correctly, the task should mute Outlook and Teams when it runs.
+
+You can also set up a profile in Tasker to automatically run the task at the specified times. To do this, create a new profile in Tasker and choose the "Time" context. Set the "From" and "To" fields to the start and end times when you want the apps to be muted, and then choose the "Mute Outlook and Teams" task as the "Task" to be run when the profile is active. Save the profile and exit Tasker.
