@@ -1,0 +1,31 @@
+import concurrent.futures
+import threading
+
+# A list to store the results of the tasks
+results = []
+
+# A lock to synchronize access to the results list
+lock = threading.Lock()
+
+def process_url(url, lock):
+    # Do some work with the URL
+    result = "Result for " + url
+
+    # Acquire the lock to update the results list
+    with lock:
+        results.append(result)
+
+def main():
+    # Create a thread pool with 4 worker threads
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        # Submit the process_url() function as a task for each URL
+        for url in urls:
+            executor.submit(process_url, url, lock)
+
+    # Write the results to the results.txt file
+    with open("results.txt", "w") as f:
+        for result in results:
+            f.write(result + "\n")
+
+if __name__ == "__main__":
+    main()
