@@ -1,0 +1,45 @@
+import threading
+from queue import Queue
+
+def calculate_pi_digit(n, queue):
+    """Calculate the n-th hexadecimal digit of pi using the BBP formula."""
+    # Calculate the hexadecimal digit
+    pi_digit = (1 / 16**n) * (
+        4 / (8 * n + 1)
+        - 2 / (8 * n + 4)
+        - 1 / (8 * n + 5)
+        - 1 / (8 * n + 6)
+    )
+    
+    # Store the result in the queue
+    queue.put(int(pi_digit * 16))
+
+def calculate_pi(num_digits):
+    """Calculate the value of pi to the given number of hexadecimal digits."""
+    # Create a queue to store the results of the threads
+    queue = Queue()
+    
+    # Create a thread for each digit that we want to calculate
+    for i in range(num_digits):
+        t = threading.Thread(target=calculate_pi_digit, args=(i, queue))
+        t.start()
+    
+    # Wait for all threads to complete
+    for i in range(num_digits):
+        t.join()
+    
+    # Concatenate the results of the threads
+    pi = ""
+    for i in range(num_digits):
+        pi += hex(queue.get())[2:]
+    
+    return pi
+
+
+
+import timeit
+
+# Calculate the value of pi to 1000 hexadecimal digits
+num_digits = 1000
+pi = timeit.timeit(lambda: calculate_pi(num_digits), number=1)
+print(f"Calculated pi to {num_digits} digits in {pi:.3f} seconds")
