@@ -1,0 +1,11 @@
+def calculate_pi_digit(n):
+    """Calculate the n-th hexadecimal digit of pi using the BBP formula."""
+    # Calculate the hexadecimal digit
+    pi_digit = (1 / 16**n) * (
+        4 / (8 * n + 1)
+        - 2 / (8 * n + 4)
+        - 1 / (8 * n + 5)
+        - 1 / (8 * n + 6)
+    )
+    
+    return int(pi_digit * 16)

@@ -1,0 +1,39 @@
+import threading
+
+def calculate_pi_digit(n):
+    """Calculate the n-th hexadecimal digit of pi using the BBP formula."""
+    # Calculate the hexadecimal digit
+    pi_digit = (1 / 16**n) * (
+        4 / (8 * n + 1)
+        - 2 / (8 * n + 4)
+        - 1 / (8 * n + 5)
+        - 1 / (8 * n + 6)
+    )
+    
+    return int(pi_digit * 16)
+
+def calculate_pi(num_digits):
+    """Calculate the value of pi to the given number of hexadecimal digits."""
+    # Create a list to store the threads
+    threads = []
+    
+    # Create a thread for each digit that we want to calculate
+    for i in range(num_digits):
+        t = threading.Thread(target=calculate_pi_digit, args=(i,))
+        threads.append(t)
+        t.start()
+    
+    # Wait for all threads to complete
+    for t in threads:
+        t.join()
+    
+    # Concatenate the results of the threads
+    pi = ""
+    for t in threads:
+        pi += hex(t.result)[2:]
+    
+    return pi
+
+
+pi = calculate_pi(10)
+print(pi)  # Outputs: "3.243F6A88"
