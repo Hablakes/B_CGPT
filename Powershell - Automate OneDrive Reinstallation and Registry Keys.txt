@@ -1,0 +1,38 @@
+# Remove OneDrive registry keys
+Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "OneDrive" -ErrorAction SilentlyContinue
+Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" -Name "OneDrive" -ErrorAction SilentlyContinue
+
+# Uninstall OneDrive
+Get-AppxPackage *onedrive* | Remove-AppxPackage
+
+# Reinstall OneDrive
+$OneDriveSetup = "$env:SystemRoot\SysWOW64\OneDriveSetup.exe"
+& $OneDriveSetup /silent
+
+
+
+
+
+or
+
+
+
+
+
+
+# Uninstall OneDrive
+Get-AppxPackage *onedrive* | Remove-AppxPackage
+
+# Reinstall OneDrive
+$OneDriveSetup = "$env:SystemRoot\SysWOW64\OneDriveSetup.exe"
+& $OneDriveSetup /silent
+
+
+
+
+
+This script first uses the Remove-Item cmdlet to delete the OneDrive registry keys located at HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders and HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders. These keys contain information about the location of the OneDrive folder on the system, and deleting them can help ensure that the OneDrive installation is completely removed from the system.
+
+The script then proceeds to uninstall and reinstall OneDrive as before.
+
+As before, it is important to note that this script does not guarantee that your OneDrive data will be preserved during the uninstall and reinstall process. You should always create a backup of your OneDrive data before attempting any major changes to the OneDrive installation.
