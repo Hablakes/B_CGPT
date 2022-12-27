@@ -1,0 +1,59 @@
+import concurrent.futures
+import time
+
+import cv2
+import numpy as np
+import os
+
+def extract_frames(video_path, num_frames):
+    # Open the video file
+    video = cv2.VideoCapture(video_path)
+
+    # Find the number of frames in the video file
+    video_length = int(video.get(cv2.CAP_PROP_FRAME_COUNT)) - 1
+    print(f'Number of frames in the video: {video_length}')
+
+    # Calculate the interval between frames
+    interval = video_length // num_frames
+
+    # Initialize variables
+    count = 0
+    frames = []
+    success = True
+
+    # Iterate over the frames of the video
+    while success:
+        success, frame = video.read()
+        if count % interval == 0:
+            # Resize the frame and add it to the list
+            frame = cv2.resize(frame, (640, 360))
+            frames.append(frame)
+        count += 1
+
+    # Release the video file
+    video.release()
+
+    return frames
+
+def extract_frames_parallel(video_path, num_frames, num_threads):
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
+        frames = list(executor.map(extract_frames, [video_path] * num_threads, [num_frames] * num_threads))
+
+    return frames
+
+if __name__ == '__main__':
+    # Set the video path and the number of frames to extract
+    video_path = 'path/to/video.mp4'
+    num_frames = 10
+
+    # Extract the frames in parallel using 4 threads
+    start = time.perf_counter()
+    frames = extract_frames_parallel(video_path, num_frames, num_threads=4)
+    end = time.perf_counter()
+
+    # Print the elapsed time
+    print(f'Elapsed time: {end - start:.2f} seconds')
+
+    # Save the frames to disk
+    for i, frame in enumerate(frames):
+        cv2.imwrite(f'frame_{i}.jpg', frame)
