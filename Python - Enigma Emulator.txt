@@ -1,0 +1,108 @@
+Create an instance of the Enigma machine
+enigma = Enigma(ROTORS, REFLECTOR)
+
+Main loop
+while True:
+# Prompt the user for a message to encode
+message = input("Enter a message to encode (blank to quit): ")
+
+
+# Quit if the message is blank
+if not message:
+    break
+
+# Encode the message and display the result
+encoded = enigma.encode(message)
+print(f"Encoded message: {encoded}")
+
+# Rotate the rotors
+enigma.rotate()
+
+
+
+To use the Enigma machine emulator, run the code and follow the prompts in the terminal. You can enter a message to encode and the Enigma machine will display the encoded message. The rotors will rotate after each message is encoded. To quit the program, enter an empty message.
+
+
+
+
+# The rotors for the Enigma machine
+ROTORS = [
+    "EKMFLGDQVZNTOWYHXUSPAIBRCJ",  # Rotor I
+    "AJDKSIRUXBLHWTMCQGZNPYFVOE",  # Rotor II
+    "BDFHJLCPRTXVZNYEIWGAKMUSQO",  # Rotor III
+]
+
+# The reflector for the Enigma machine
+REFLECTOR = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
+
+
+class Enigma:
+    def __init__(self, rotors, reflector):
+        self.rotors = rotors
+        self.reflector = reflector
+
+    def encode(self, message):
+        message = message.upper()  # Convert the message to uppercase
+        encoded = ""  # Initialize an empty string to store the encoded message
+
+        # Step 1: Pass the message through the rotors in series
+        for rotor in self.rotors:
+            encoded = ""  # Initialize an empty string to store the output of this step
+            for c in message:
+                encoded += rotor[ord(c) - ord('A')]  # Substitute the letter according to the rotor's mapping
+            message = encoded  # Update the message for the next iteration
+
+        # Step 2: Pass the message through the reflector
+        encoded = ""  # Initialize an empty string to store the output of this step
+        for c in message:
+            encoded += self.reflector[ord(c) - ord('A')]  # Substitute the letter according to the reflector's mapping
+        message = encoded  # Update the message for the next iteration
+
+        # Step 3: Pass the message through the rotors in reverse order
+        for rotor in reversed(self.rotors):
+            encoded = ""  # Initialize an empty string to store the output of this step
+            for c in message:
+                # Substitute the letter according to the inverse of the rotor's mapping
+                encoded += chr((rotor.index(c) + ord('A')) % 26)
+            message = encoded  # Update the message for the next iteration
+
+        return encoded  # Return the encoded message
+
+
+
+
+"""
+class Enigma:
+    def __init__(self, rotors, reflector):
+        self.rotors = rotors
+        self.reflector = reflector
+
+    def encode(self, message):
+        # TODO: Implement the encoding process
+        pass
+
+    def rotate(self):
+        # TODO: Implement the rotor rotation process
+        pass
+        
+        
+class Enigma:
+    # ...
+
+    def rotate(self):
+        # Rotate the first rotor
+        self.rotors[0] = self.rotors[0][1:] + self.rotors[0][0]
+        
+        # If the first rotor has completed a full rotation, rotate the second rotor
+        if self.rotors[0][0] == "A":
+            self.rotors[1] = self.rotors[1][1:] + self.rotors[1][0]
+        
+        # If the second rotor has completed a full rotation, rotate the third rotor
+        if self.rotors[1][0] == "A":
+            self.rotors[2] = self.rotors[2][1:] + self.rotors[2][0]
+
+"""
+
+
+
+
