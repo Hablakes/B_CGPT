@@ -1,0 +1,40 @@
+import os
+import timeit
+import threading
+import concurrent.futures
+
+# Set the number of worker threads to use
+NUM_WORKERS = 4
+
+def index_media(root_dir):
+    # Collect a list of all media files in the root directory and its subdirectories
+    media_files = []
+    for root, dirs, files in os.walk(root_dir):
+        for file in files:
+            if file.endswith('.mp3') or file.endswith('.mp4') or file.endswith('.avi'):
+                media_files.append(os.path.join(root, file))
+    
+    # Divide the media files into NUM_WORKERS equally sized chunks
+    chunk_size = len(media_files) // NUM_WORKERS
+    media_chunks = [media_files[i:i+chunk_size] for i in range(0, len(media_files), chunk_size)]
+    
+    # Create a thread pool with NUM_WORKERS worker threads
+    with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_WORKERS) as executor:
+        # Schedule a task to be run in each worker thread
+        tasks = [executor.submit(process_media_chunk, chunk) for chunk in media_chunks]
+        
+        # Wait for all tasks to complete
+        concurrent.futures.wait(tasks)
+
+
+def process_media_chunk(media_chunk):
+    # Do some work on the media files in the chunk, such as extracting metadata or creating thumbnails
+    for media_file in media_chunk:
+        print(f'Processing {media_file}...')
+        time.sleep(0.1)
+
+# Test the index_media function
+index_media('/path/to/root/dir')
+
+# Measure the time it takes to run the index_media function
+print(timeit.timeit(lambda: index_media('/path/to/root/dir'), number=1))

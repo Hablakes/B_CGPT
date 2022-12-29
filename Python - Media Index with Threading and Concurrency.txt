@@ -1,0 +1,33 @@
+import os
+import threading
+import concurrent.futures
+
+def index_media(path):
+    # Iterate over files and folders in the given path
+    for name in os.listdir(path):
+        full_path = os.path.join(path, name)
+        if os.path.isdir(full_path):
+            # If the current item is a folder, index its contents
+            index_media(full_path)
+        else:
+            # If the current item is a file, index it
+            print(f"Indexing file: {full_path}")
+
+# Create a thread to run the indexing function
+thread = threading.Thread(target=index_media, args=("/path/to/media",))
+
+# Start the thread
+thread.start()
+
+# Wait for the thread to complete
+thread.join()
+
+# Alternatively, you can use the concurrent.futures module to run the indexing function in a worker thread
+
+# Create a thread pool with 2 worker threads
+with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+    # Schedule the indexing function to be run in a worker thread
+    future = executor.submit(index_media, "/path/to/media")
+    
+    # Wait for the function to complete
+    result = future.result()
