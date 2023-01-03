@@ -1,0 +1,28 @@
+import socket
+import subprocess
+
+# Set up packet filtering using iptables
+subprocess.call(["iptables", "-A", "INPUT", "-i", "eth0", "-p", "tcp", "--dport", "22", "-j", "ACCEPT"])
+subprocess.call(["iptables", "-A", "INPUT", "-i", "eth0", "-p", "tcp", "--dport", "80", "-j", "ACCEPT"])
+subprocess.call(["iptables", "-A", "INPUT", "-i", "eth0", "-j", "DROP"])
+
+# Create a raw socket and bind it to the specified interface
+sock = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
+sock.bind(("eth0", 0))
+
+# Set the socket to promiscuous mode
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+
+# Set the socket to be able to receive all IP packets
+sock.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
+
+# Set the socket to be able to receive all ethernet frames
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, "eth0")
+
+# Listen for incoming packets
+while True:
+    packet, addr = sock.recvfrom(65565)
+    
+    # Process the packet
+    # ...
