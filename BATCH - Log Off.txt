@@ -1,0 +1,7 @@
+@echo off
+
+rem Log off the current user
+shutdown /l
+
+rem End the batch file
+exit
