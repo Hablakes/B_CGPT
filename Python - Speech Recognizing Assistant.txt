@@ -1,0 +1,81 @@
+import pyttsx3
+import speech_recognition as sr
+import pyautogui
+
+# Initialize the TTS engine
+engine = pyttsx3.init()
+
+# Set the TTS voice and rate
+engine.setProperty('voice', 'english')
+engine.setProperty('rate', 150)
+
+# Function to speak a message
+def speak(message):
+    engine.say(message)
+    engine.runAndWait()
+
+# Function to recognize a command
+def recognize_command():
+    # Initialize the STT engine
+    r = sr.Recognizer()
+
+    # Prompt the user to speak a command
+    speak("Please speak a command")
+
+    # Listen for the user's command
+    with sr.Microphone() as source:
+        audio = r.listen(source)
+
+    # Try to recognize the command
+    try:
+        command = r.recognize_google(audio).lower()
+        speak("You said: " + command)
+        return command
+    except sr.UnknownValueError:
+        speak("Sorry, I didn't understand that")
+        return ""
+    except sr.RequestError:
+        speak("Sorry, my speech recognition service is down")
+        return ""
+
+# Main loop
+while True:
+    # Recognize a command
+    command = recognize_command()
+
+    # Perform the appropriate action based on the command
+    if "open" in command:
+        # Extract the name of the program to open
+        program = command.replace("open", "").strip()
+
+        # Check if the program is installed
+        if shutil.which(program) is not None:
+            # Program is installed, open it
+            subprocess.call([program])
+        else:
+            # Program is not installed, alert the user
+            speak("Sorry, I couldn't find the program '" + program + "' on your computer")
+    elif "close" in command:
+        # Extract the name of the program to close
+        program = command.replace("close", "").strip()
+
+        # Close the program
+        pyautogui.hotkey('alt', 'f4')
+    elif "launch" in command:
+        # Extract the name of the batch file to launch
+        batch_file = command.replace("launch", "").strip()
+
+        # Check if the batch file exists
+        if os.path.exists(batch_file):
+            # Batch file exists, launch it
+            subprocess.call(["cmd", "/c", batch_file])
+        else:
+            # Batch file does not exist, alert the user
+            speak("Sorry, I couldn't find the batch file '" + batch_file + "' on your computer")
+    elif "exit" in command:
+        # Exit the AI assistant
+        speak("Exiting the AI assistant")
+        break
+    else:
+        # Unrecognized command
+        speak("Sorry, I didn't understand your command")
