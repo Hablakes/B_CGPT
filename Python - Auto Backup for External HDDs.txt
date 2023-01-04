@@ -1,0 +1,31 @@
+import os
+import shutil
+
+# Define the source and destination folders
+source_folders = {
+    "C:\\folder1": "E:\\backup\\folder1",
+    "C:\\folder2": "E:\\backup\\folder2",
+}
+
+# Function to copy files from source to destination
+def copy_files(src, dst):
+    for item in os.listdir(src):
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+        if os.path.isdir(s):
+            shutil.copytree(s, d)
+        else:
+            shutil.copy2(s, d)
+
+# Listen for events such as the insertion of a new hard drive
+while True:
+    # Check if the hard drive is connected
+    if os.path.exists("E:\\"):
+        # Hard drive is connected
+        for src, dst in source_folders.items():
+            # Check if the destination folder exists on the hard drive
+            if not os.path.exists(dst):
+                # Create the destination folder
+                os.makedirs(dst)
+            # Copy files from the source folder to the destination folder
+            copy_files(src, dst)
