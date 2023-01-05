@@ -1,0 +1,26 @@
+$options = @(
+    'Get-Tpm'
+    'Initialize-Tpm'
+    'Clear-Tpm'
+    'Backup-Tpm'
+    'Restore-Tpm'
+    'Get-TpmOwnerAuth'
+    'Set-TpmOwnerAuth'
+	
+)
+
+$selectedOption = $null
+while ($selectedOption -eq $null) {
+    Write-Host "Please select an option:"
+    for ($i = 0; $i -lt $options.Length; $i++) {
+        Write-Host "  $(($i+1)). $($options[$i])"
+    }
+    $input = Read-Host "Enter the number of the option you want to select"
+    if ($input -gt 0 -and $input -le $options.Length) {
+        $selectedOption = $options[$input - 1]
+    } else {
+        Write-Host "Invalid option. Please try again."
+    }
+}
+
+Write-Host "You selected: $selectedOption"
