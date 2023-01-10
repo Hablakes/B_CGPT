@@ -1,0 +1,31 @@
+from PIL import Image
+import binascii
+
+# Open the image and get the pixel map
+image = Image.open("original.png")
+pixels = image.load()
+
+# Open the message file and read in the message
+with open("message.txt", "r") as message_file:
+    message = message_file.read()
+
+# Convert the message to a binary string
+binary_string = ''.join(format(ord(c), '08b') for c in message)
+
+# Set a counter for the current position in the binary string
+counter = 0
+
+# Iterate over the pixels in the image
+for i in range(image.size[0]):
+    for j in range(image.size[1]):
+        # Get the current pixel's RGB values
+        r, g, b = pixels[i, j]
+
+        # Set the least significant bit of each RGB value to the next bit in the binary string
+        pixels[i, j] = (r[:-1] + binary_string[counter], g[:-1] + binary_string[counter + 1], b[:-1] + binary_string[counter + 2])
+
+        # Increment the counter by 3 (one for each of the R, G, and B values)
+        counter += 3
+
+# Save the modified image
+image.save("hidden.png")
