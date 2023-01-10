@@ -1,0 +1,27 @@
+from PIL import Image
+
+# Open the image and get the pixel map
+with Image.open("original.png") as image:
+    # Open the message file and read in the message
+    with open("message.txt", "r") as message_file:
+        message = message_file.read()
+    # Convert message to bytes
+    message = message.encode()
+
+    # Append message length
+    message = len(message).to_bytes(4,byteorder='big') + message
+    
+    # Get size of image
+    width, height = image.size
+    # Add the message to the pixels
+    pixels = list(image.getdata())
+    for i, pixel in enumerate(pixels):
+        if i < len(message)*8:
+            pixel = pixel[:3] + (pixel[3]&252 | message[i//8]>>(i%8)&1,)
+            pixels[i] = pixel
+    # create new image
+    image = Image.new(image.mode, (width, height))
+    image.putdata(pixels)
+    # Save the modified image
+    image.save("hidden.png")
+
