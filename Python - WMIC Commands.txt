@@ -1,0 +1,83 @@
+import subprocess
+
+commands = {
+    1: 'wmic cpu get name',
+    2: 'wmic os get name',
+    3: 'wmic computersystem get name'
+}
+
+def main():
+    print("Please enter a number or group of numbers corresponding to the command you want to run:")
+    for key in commands:
+        print(key, commands[key])
+
+    user_input = input()
+
+    for num in user_input.split(','):
+        command = commands.get(int(num))
+        if command:
+            subprocess.call(command, shell=True)
+        else:
+            print(f"{num} is not a valid input.")
+
+if __name__ == '__main__':
+    main()
+
+
+
+OR
+
+
+
+
+
+import subprocess
+
+# List of WMIC commands
+commands = [
+    "wmic os get caption",
+    "wmic os get osarchitecture",
+    "wmic cpu get name",
+    "wmic memorychip get capacity",
+    "wmic diskdrive get size",
+    "wmic logicaldisk where drivetype=3 get name, freespace, size",
+    "wmic net use",
+    "wmic path win32_networkadapterconfiguration where IPEnabled='true' get DHCPEnabled,IPAddress,DefaultIPGateway,MACAddress",
+    "wmic computersystem get username",
+    "wmic process list brief"
+]
+
+# Function to run a single WMIC command
+def run_command(command):
+    print("Running command: ", command)
+    result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(result.stdout.decode())
+    print("------------------------------")
+
+# Function to run a range of WMIC commands
+def run_commands(start, end):
+    for i in range(start, end+1):
+        run_command(commands[i])
+
+# Main function to get user input and run commands
+def main():
+    user_input = input("Enter command number or range of numbers (ex: 2 or 2-5): ")
+
+    # Check if user provided a single number
+    if "-" not in user_input:
+        try:
+            command_number = int(user_input)
+            run_command(commands[command_number])
+        except ValueError:
+            print("Invalid input. Please enter a valid number or range.")
+
+    # Check if user provided a range of numbers
+    else:
+        try:
+            start, end = [int(x) for x in user_input.split("-")]
+            run_commands(start, end)
+        except ValueError:
+            print("Invalid input. Please enter a valid number or range.")
+
+if __name__ == "__main__":
+    main()
