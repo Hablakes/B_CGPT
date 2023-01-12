@@ -1,8 +1,9 @@
 import os
 import tkinter as tk
 from tkinter import filedialog
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 from stegano import lsb
+
 
 def encrypt_message(message, key):
     cipher = AES.new(key, AES.MODE_EAX)
@@ -10,14 +11,17 @@ def encrypt_message(message, key):
     ciphertext, tag = cipher.encrypt_and_digest(message.encode())
     return ciphertext, nonce
 
+
 def decrypt_message(ciphertext, nonce, key):
     cipher = AES.new(key, AES.MODE_EAX, nonce)
     message = cipher.decrypt(ciphertext).decode()
     return message
 
+
 def browse_image():
     filename = filedialog.askopenfilename(initialdir = "/", title = "Select an image", filetypes = (("PNG files", "*.png"), ("all files", "*.*")))
     image_path.set(filename)
+
 
 def hide_message():
     message = message_text.get("1.0",'end-1c')
@@ -28,12 +32,14 @@ def hide_message():
     secret.save("encoded_image.png")
     result_text.set("Message encoded in image successfully.")
 
+
 def reveal_message():
     clear_ciphertext = lsb.reveal(image_path.get())
     key = key_text.get()
     encrypt_key = key.encode()
     clear_message = decrypt_message(clear_ciphertext, nonce, encrypt_key)
     result_text.set(clear_message)
+
 
 root = tk.Tk()
 root.title("Steganography")
