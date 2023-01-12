@@ -29,3 +29,56 @@ for i in range(image.size[0]):
 
 # Save the modified image
 image.save("hidden.png")
+
+
+
+
+
+
+
+
+
+OR
+
+
+
+
+
+
+
+from PIL import Image
+
+# Open the image
+with Image.open("image.jpg") as im:
+    # Encode the message in the image
+    encoded_im = im.point(lambda i: i + int(ord(message[i % len(message)])))
+    # Save the encoded image
+    encoded_im.save("encoded_image.jpg")
+
+
+
+from PIL import Image
+
+# Open the encoded image
+with Image.open("encoded_image.jpg") as encoded_im:
+    # Decode the message from the image
+    message = "".join([chr(i - int(ord(message[i % len(message)]))) for i in encoded_im.point()])
+    print(message)
+
+
+
+import stegano
+from stegano import lsb
+
+# Hide the message in the image
+secret = lsb.hide("image.png", "This is a secret message.")
+secret.save("encoded_image.png")
+
+# Extract the message from the encoded image
+clear_message = lsb.reveal("encoded_image.png")
+print(clear_message)
+
+
+
+
+
