@@ -1,0 +1,53 @@
+import tkinter as tk
+from tkinter import filedialog
+
+
+def get_input():
+    root = tk.Tk()
+    root.title("Steganography")
+
+    # Create a label and entry widget for the key
+    key_label = tk.Label(root, text="Key:")
+    key_label.grid(row=0, column=0)
+    key_entry = tk.Entry(root)
+    key_entry.grid(row=0, column=1)
+
+    # Create a button to select the key using the file dialog
+    key_button = tk.Button(root, text="Select key file", command=lambda: select_file(key_entry))
+    key_button.grid(row=0, column=2)
+
+    # Create a label and entry widget for the message
+    message_label = tk.Label(root, text="Message:")
+    message_label.grid(row=1, column=0)
+    message_entry = tk.Entry(root)
+    message_entry.grid(row=1, column=1)
+
+    # Create a button to select the message using the file dialog
+    message_button = tk.Button(root, text="Select message file", command=lambda: select_file(message_entry))
+    message_button.grid(row=1, column=2)
+
+    # Create a label and entry widget for the image
+    image_label = tk.Label(root, text="Image:")
+    image_label.grid(row=2, column=0)
+    image_entry = tk.Entry(root)
+    image_entry.grid(row=2, column=1)
+
+    # Create a button to select the image using the file dialog
+    image_button = tk.Button(root, text="Select image file", command=lambda: select_file(image_entry))
+    image_button.grid(row=2, column=2)
+
+    # Create a button to start the encryption/decryption process
+    start_button = tk.Button(root, text="Start", command=lambda: start_process(key_entry.get(), message_entry.get(), image_entry.get()))
+    start_button.grid(row=3, column=1)
+
+    root.mainloop()
+
+def select_file(entry_widget):
+    filepath = filedialog.askopenfilename()
+    entry_widget.delete(0, tk.END)
+    entry_widget.insert(0, filepath)
+
+def start_process(key, message, image):
+    pass
+
+get_input()
