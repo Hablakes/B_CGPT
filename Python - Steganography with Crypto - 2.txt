@@ -47,7 +47,38 @@ def select_file(entry_widget):
     entry_widget.delete(0, tk.END)
     entry_widget.insert(0, filepath)
 
-def start_process(key, message, image):
-    pass
+def start_process(key, message, image, process):
+    # open the image
+    with Image.open(image) as img:
+        # Create a new nonce
+        nonce = os.urandom(12)
+        # Create the cipher
+        cipher = Cipher(algorithms.AES(key.encode()), modes.GCM(nonce), backend=default_backend())
+        
+        if process == "encrypt":
+            # Create the encryptor
+            encryptor = cipher.encryptor()
+            # Encrypt the message
+            ciphertext = encryptor.update(message.encode()) + encryptor.finalize()
+            # Save the nonce to a file
+            with open("nonce.bin", "wb") as f:
+                f.write(nonce)
+            # Perform steganography to hide the ciphertext in the image
+            # ...
+            success_label.config(text="Encryption successful")
+            
+        elif process == "decrypt":
+            # Read the nonce from the file
+            with open("nonce.bin", "rb") as f:
+                nonce = f.read()
+            # Perform steganography to extract the ciphertext from the image
+            # ...
+            # Create the decryptor
+            decryptor = cipher.decryptor()
+            # Decrypt the ciphertext
+            plaintext = decryptor.update(ciphertext) + decryptor.finalize()
+            message_entry.insert(0, plaintext.decode())
+            success_label.config(text="Decryption successful")
+
 
 get_input()
