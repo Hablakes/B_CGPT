@@ -48,3 +48,52 @@ if __name__ == '__main__':
     main_window = MainWindow()
     main_window.show()
     sys.exit(app.exec_())
+
+
+
+OR
+
+
+
+import sys
+from PyQt5.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QGraphicsTextItem
+from PyQt5.QtGui import QPixmap, QPainter
+from PyQt5.QtCore import Qt
+
+
+class MainWindow(QGraphicsView):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        # Create graphics scene
+        self.scene = QGraphicsScene(self)
+        self.setScene(self.scene)
+
+        # Create graphics items
+        self.items = []
+        for i in range(1, 6):
+            item = QGraphicsPixmapItem(QPixmap("path/to/icon.png"))
+            item.setPos(i*100, 0)
+            self.items.append(item)
+            self.scene.addItem(item)
+            text = QGraphicsTextItem(str(i))
+            text.setPos(i*100, 40)
+            self.scene.addItem(text)
+
+        # Set View 
+        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.SmoothPixmapTransform)
+        self.setRenderHint(QPainter.TextAntialiasing)
+        self.setRenderHint(QPainter.HighQualityAntialiasing)
+        self.setRenderHint(QPainter.NonCosmeticDefaultPen)
+        self.setRenderHint(QPainter.Qt4CompatiblePainting)
+        self.setRenderHint(QPainter.Qt5CompatiblePainting)
+        self.setRenderHint(QPainter.TextAntialiasing)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    main_window = MainWindow()
+    main_window.show()
+    sys.exit(app.exec_())
+
