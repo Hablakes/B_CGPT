@@ -1,0 +1,36 @@
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QListWidget, QListWidgetItem
+from PyQt5.QtGui import QColor, QBrush
+
+class MainWindow(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        # Create list widget
+        self.list_widget = QListWidget()
+        self.list_widget.setFlow(QListWidget.LeftToRight)
+        self.list_widget.setWrapping(True)
+        self.list_widget.setResizeMode(QListWidget.Adjust)
+        self.list_widget.setViewMode(QListWidget.IconMode)
+        self.list_widget.setMovement(QListWidget.Static)
+        self.list_widget.setSpacing(10)
+
+        # Create list items
+        for i in range(1, 6):
+            item = QListWidgetItem()
+            item.setText(str(i))
+            item.setBackground(QBrush(QColor("#ffcccc")))
+            item.setTextAlignment(Qt.AlignCenter)
+            item.setIconSize(QSize(100, 100))
+            self.list_widget.addItem(item)
+
+        # Create layout
+        layout = QHBoxLayout()
+        layout.addWidget(self.list_widget)
+        self.setLayout(layout)
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    main_window = MainWindow()
+    main_window.show()
+    sys.exit(app.exec_())
