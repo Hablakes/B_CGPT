@@ -1,0 +1,28 @@
+import tkinter as tk
+from tkinter import ttk
+
+
+def display_info():
+    selection = combo.get()
+    if selection == "Option 1":
+        label.config(text="You selected option 1.")
+    elif selection == "Option 2":
+        label.config(text="You selected option 2.")
+    else:
+        label.config(text="Please make a selection.")
+
+
+root = tk.Tk()
+root.geometry("200x200")
+
+combo = ttk.Combobox(root, values=["Option 1", "Option 2"])
+combo.current(0)
+combo.pack()
+
+button = tk.Button(root, text="Submit", command=display_info)
+button.pack()
+
+label = tk.Label(root)
+label.pack()
+
+root.mainloop()
