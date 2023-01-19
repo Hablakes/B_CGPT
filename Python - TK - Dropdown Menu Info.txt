@@ -1,0 +1,37 @@
+import tkinter as tk
+from tkinter import ttk
+import pandas as pd
+
+customer_files_directory = 'C:/Users/botoole/Documents/BX STUFF/CODING DOCS/'
+
+
+def on_select(event=None):
+    # Retrieve the selected item from the dropdown list
+    selection = dropdown.get()
+    # Read the corresponding Excel file
+    df = pd.read_excel(customer_files_directory + f'{selection}.xlsx')
+    # Display the contents of the file in the text box
+    text.config(state='normal')
+    text.delete('1.0', tk.END)
+    text.insert('1.0', df.to_string())
+    text.config(state='disabled')
+
+
+root = tk.Tk()
+root.title('NetXPerts Customer Information Directory')
+
+# Create the dropdown list
+dropdown = ttk.Combobox(root, values=['Applied Test Systems', 'file2', 'file3'])
+dropdown.current(0)
+dropdown.bind('<<ComboboxSelected>>', on_select)
+dropdown.pack()
+
+# Create the button
+button = tk.Button(root, text='Submit', command=on_select)
+button.pack()
+
+# Create the text box
+text = tk.Text(root, state='disabled')
+text.pack()
+
+root.mainloop()
