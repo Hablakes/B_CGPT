@@ -1,0 +1,24 @@
+#!/bin/bash
+
+root_folder="/path/to/root/folder"  # Specify the root folder containing the subfolders
+
+# Loop through each subfolder
+for subfolder in "$root_folder"/*/; do
+    subfolder_name=$(basename "$subfolder")
+    
+    # Find the file with "english" in the title within the subfolder
+    file=$(find "$subfolder" -type f -iname "*english*")
+    
+    if [ -n "$file" ]; then
+        # Extract the file extension
+        extension="${file##*.}"
+        
+        # Rename the file with the parent folder name
+        new_file="$root_folder/$subfolder_name.$extension"
+        mv "$file" "$new_file"
+        
+        echo "Moved and renamed file: $new_file"
+    else
+        echo "No file found with 'english' in the title in subfolder: $subfolder_name"
+    fi
+done
