@@ -1,5 +1,5 @@
 def find_digits_in_pi(digits):
-    with open("pi_digits.txt", "r") as file:
+    with open("C:/Users/botoole/Downloads/Pi_Billion_Digits.txt", "r") as file:
         pi_str = file.read().replace("\n", "")
 
     index = pi_str.find(digits)
@@ -7,11 +7,12 @@ def find_digits_in_pi(digits):
         start_index = max(0, index - 20)
         end_index = min(len(pi_str), index + len(digits) + 20)
         surrounding_digits = pi_str[start_index:end_index]
-        return f"The string of digits '{digits}' is found in pi at position {index}.\nSurrounding digits: {surrounding_digits}"
+        highlighted_digits = surrounding_digits.replace(digits, f"\033[1;32m{digits}\033[0m")
+        return f"The string of digits '{digits}' is found in pi at position {index}.\nSurrounding digits: {highlighted_digits}"
     else:
         return f"The string of digits '{digits}' is not found in pi."
 
 # Example usage
-digits_to_find = "1592"
+digits_to_find = "5198"
 result = find_digits_in_pi(digits_to_find)
 print(result)
