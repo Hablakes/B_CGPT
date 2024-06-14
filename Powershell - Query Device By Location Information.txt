@@ -1,0 +1,21 @@
+# Specify the desired location information
+$desiredLocationInformation = "0000.0014.0000.002.004.000.000.000.000"  
+
+# Query all PnP devices and find the ones with the specified location information
+$devices = Get-WmiObject Win32_PnPEntity | Where-Object { $_.LocationInformation -eq $desiredLocationInformation }
+
+if ($devices) {
+    Write-Output "Devices found at location: $desiredLocationInformation"
+    Write-Output "-----------------------------------"
+    foreach ($device in $devices) {
+        Write-Output "Name: $($device.Name)"
+        Write-Output "DeviceID: $($device.DeviceID)"
+        Write-Output "Status: $($device.Status)"
+        Write-Output "Description: $($device.Description)"
+        Write-Output "Manufacturer: $($device.Manufacturer)"
+        Write-Output "Location Information: $($device.LocationInformation)"
+        Write-Output "-----------------------------------"
+    }
+} else {
+    Write-Output "No devices found at the specified location information: $desiredLocationInformation"
+}

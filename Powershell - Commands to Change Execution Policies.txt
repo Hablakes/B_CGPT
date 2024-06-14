@@ -1,0 +1,7 @@
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+ 
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+ 
+Get-ExecutionPolicy -List

@@ -1,0 +1,28 @@
+# Import the necessary module
+Import-Module PnpDevice
+
+# Get all devices
+$devices = Get-PnpDevice
+
+Write-Output "Devices and their Address Property:"
+Write-Output "-----------------------------------"
+
+foreach ($device in $devices) {
+    try {
+        # Get the address property of the device
+        $address = Get-PnpDeviceProperty -InstanceId $device.InstanceId -KeyName 'DEVPKEY_Device_Address'
+
+        if ($address) {
+            Write-Output "Name: $($device.FriendlyName)"
+            Write-Output "InstanceId: $($device.InstanceId)"
+            Write-Output "Address: $($address.Data)"
+            Write-Output "-----------------------------------"
+        }
+    } catch {
+        # Handle cases where the address property is not available
+        Write-Output "Name: $($device.FriendlyName)"
+        Write-Output "InstanceId: $($device.InstanceId)"
+        Write-Output "Address: Not available"
+        Write-Output "-----------------------------------"
+    }
+}

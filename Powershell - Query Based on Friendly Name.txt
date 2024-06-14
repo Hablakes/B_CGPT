@@ -1,0 +1,11 @@
+$friendlyName = "Integrated Camera"  # Replace with the desired friendly name
+Get-PnpDevice | Where-Object { $_.FriendlyName -eq $friendlyName } | ForEach-Object {
+    $address = (Get-PnpDeviceProperty -InstanceId $_.InstanceId -KeyName 'DEVPKEY_Device_Address' -ErrorAction SilentlyContinue).Data
+    Write-Output "Friendly Name: $($_.FriendlyName)"
+    Write-Output "InstanceId: $($_.InstanceId)"
+    Write-Output "Address: $($address)"
+    Write-Output "Status: $($_.Status)"
+    Write-Output "Description: $($_.Description)"
+    Write-Output "Manufacturer: $($_.Manufacturer)"
+    Write-Output "-----------------------------------"
+}

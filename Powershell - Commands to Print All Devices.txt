@@ -1,0 +1,4 @@
+Get-PnpDevice | ForEach-Object { $address = (Get-PnpDeviceProperty -InstanceId $_.InstanceId -KeyName 'DEVPKEY_Device_Address' -ErrorAction SilentlyContinue).Data; Write-Output "Friendly Name: $($_.FriendlyName)"; Write-Output "Address: $($address)"; Write-Output "-----------------------------------" }
+
+
+Get-PnpDevice | ForEach-Object { $address = (Get-PnpDeviceProperty -InstanceId $_.InstanceId -KeyName 'DEVPKEY_Device_Address' -ErrorAction SilentlyContinue).Data; if ($address) { Write-Output "Friendly Name: $($_.FriendlyName)"; Write-Output "Address: $($address)"; Write-Output "-----------------------------------" } }
